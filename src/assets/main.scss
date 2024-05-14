@@ -16,3 +16,15 @@
   // 设置element-plus主题色
   --el-color-primary: var(--cp-primary);
 }
+
+body {
+  font-size: 14px;
+  color: var(--cp-text1);
+}
+a {
+  color: var(--cp-text2);
+}
+h1,h2,h3,h4,h5,h6,p,ul,ol {
+  margin: 0;
+  padding: 0;
+}
