@@ -89,10 +89,10 @@ onUnmounted(() => {
           autocomplete="off"
         >
           <template #suffix>
-            <el-icon @click="isShow = !isShow">
-              <View v-if="isShow" />
-              <Hide v-else />
-            </el-icon>
+            <svg-icon
+              @click="isShow = !isShow"
+              :name="`login-eye-${isShow ? 'on' : 'off'}`"
+            ></svg-icon>
           </template>
         </el-input>
       </el-form-item>
