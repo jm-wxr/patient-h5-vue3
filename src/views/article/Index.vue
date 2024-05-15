@@ -1,8 +1,8 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="user-page">
-    <h1>User</h1>
+  <div class="article-page">
+    <h1>Article</h1>
   </div>
 </template>
 

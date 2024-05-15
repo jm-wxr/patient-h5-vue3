@@ -30,11 +30,11 @@ const login = async () => {
   if (!isAgree.value) return ElMessage.warning('请同意用户协议')
   await formRef.value.validate()
   const res = isPassword.value
-    ? await loginByPassword(form.mobile, form?.passwode)
+    ? await loginByPassword(form.mobile, form?.password)
     : await loginByCode(form.mobile, form?.code)
   userStore.setUser(res.data)
   // 如果有回跳地址就进行回跳，没有跳就到个人中心
-  router.push((route.query.returnUrl as string) || '/user')
+  router.push((route.query.returnUrl as string) || '/')
   ElMessage.success('登录成功')
 }
 let timeId: number
@@ -108,9 +108,9 @@ onUnmounted(() => {
       <div class="cp-cell">
         <el-checkbox v-model="isAgree">
           <span>我已同意</span>
-          <el-link type="primary" href="javascript:">用户协议</el-link>
+          <el-link type="primary" href="javascript:">&nbsp;用户协议&nbsp;</el-link>
           <span>及</span>
-          <el-link type="primary" href="javascript:">隐私政策</el-link>
+          <el-link type="primary" href="javascript:">&nbsp;隐私政策&nbsp;</el-link>
         </el-checkbox>
       </div>
       <div class="cp-cell">
@@ -129,5 +129,5 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@import '@/styles/login.scss';
+@use '@/styles/login.scss' as *;
 </style>

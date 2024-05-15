@@ -4,6 +4,7 @@ import router from './router'
 import pinia from './stores'
 //全局样式
 import './styles/main.scss'
+import 'virtual:svg-icons-register'
 
 const app = createApp(App)
 
