@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import pinia from './stores'
 //全局样式
-import './assets/main.scss'
+import './styles/main.scss'
 
 const app = createApp(App)
 

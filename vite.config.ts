@@ -11,7 +11,7 @@ export default defineConfig({
   plugins: [
     vue(),
     AutoImpot({ resolvers: [ElementPlusResolver()] }),
-    Components({ resolvers: [ElementPlusResolver()] })
+    Components({ resolvers: [ElementPlusResolver({ importStyle: 'sass' })] })
   ],
   base: '/',
   resolve: {
@@ -27,6 +27,11 @@ export default defineConfig({
           viewportUnit: 'vw'
         })
       ]
+    },
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@use "@/styles/element/index.scss" as *;`
+      }
     }
   }
 })

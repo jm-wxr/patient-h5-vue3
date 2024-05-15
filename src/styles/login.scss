@@ -1,0 +1,59 @@
+.login {
+  &-page {
+    padding-top: 10px;
+  }
+  &-header {
+    display: flex;
+    padding: 30px 30px 50px;
+    justify-content: space-between;
+    align-items: end;
+    line-height: 1;
+    h3 {
+      font-weight: normal;
+      font-size: 24px;
+    }
+    a {
+      font-size: 15px;
+    }
+  }
+  &-other {
+    text-align: center;
+    margin-top: 60px;
+    padding: 0 30px;
+    img {
+      width: 36px;
+      height: 36px;
+      padding: 4px;
+    }
+  }
+}
+.el-form {
+  padding: 0 14px;
+  .el-input {
+    height: 40px;
+    .btn-send {
+      color:var(--cp-primary)
+    }
+  }
+  .cp-cell {
+    display: flex;
+    padding: 14px 16px;
+    align-items: center;
+    line-height: 24px;
+    box-sizing: border-box;
+    .el-checkbox {
+      --el-checkbox-border-radius: 50%;
+    }
+    .el-button {
+      height: 40px;
+      border-radius: 20px;
+      width: 100%;
+    }
+  }
+  .btn-send {
+    color: var(--cp-primary);
+    &.active {
+      color: rgba(22,194,163,0.5);
+    }
+  }
+}

@@ -2,7 +2,7 @@ import { useUserStore } from '@/stores'
 import axios, { type Method } from 'axios'
 import router from '@/router'
 
-interface Data<T> {
+export interface Data<T> {
   code: number
   message: string
   data: T
@@ -59,6 +59,7 @@ instance.interceptors.response.use(
   }
 )
 
+// 封装请求方法，使用泛型约束返回值类型
 const request = <T>(url: string, method: Method = 'get', extraData?: object) => {
   return instance.request<T, Data<T>>({
     url,
