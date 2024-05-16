@@ -1,16 +1,13 @@
 .user-page {
   background-color: var(--cp-bg);
-  min-height: calc(100vh - 50px);
-  padding: 0 15px;
+  padding:0 15px;
   // 头部-用户信息
   &-head {
-    height: 200px;
     background: linear-gradient(180deg, rgba(44, 181, 165, 0.46), rgba(44, 181, 165, 0));
-    margin: 0 -15px;  
-    padding: 0 15px;
+    margin: 0 -15px;
+    padding: 35px 15px 15px;
     .top {
       display: flex;
-      padding-top: 50px;
       padding-left: 10px;
       .el-image {
         width: 70px;
@@ -95,6 +92,6 @@
   // 退出登录
   .logout {
     text-align: center;
-    margin-top: 15px;
+    padding: 15px 0;
   }
 }

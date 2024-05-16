@@ -23,7 +23,7 @@ watch(tabPath, (path) => {
 
 <template>
   <div class="layout-page">
-    <router-view></router-view>
+    <router-view style="min-height: calc(100vh - 50px)"></router-view>
     <!-- 绑定v-model，表示当前tab-pane的name属性 -->
     <el-tabs v-model="tabPath" tab-position="bottom" :stretch="true">
       <!-- v-for 循环渲染 -->

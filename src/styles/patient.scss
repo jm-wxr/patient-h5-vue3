@@ -1,6 +1,6 @@
 .patient-list {
   margin-top: 10px;
-  padding: 15px;
+  padding: 0 15px;
 }
 .patient-item {
   position: relative;
@@ -8,6 +8,7 @@
   padding: 15px;
   background-color: var(--cp-bg);
   border-radius: 10px;
+  transition: all 0.3s;
   .info {
     display: flex;
     flex-wrap: wrap;
@@ -19,9 +20,12 @@
       &.name {
         font-size: 16px;
         color: var(--cp-text1);
+        width: 80px;
+        margin-right: 0;
       }
       &.id {
         color: var(--cp-text2);
+        width: 180px;
       }
     }
   }
@@ -38,7 +42,6 @@
     border-radius: 3px;
   }
   .svg-icon {
-    margin-left: 60px;
     align-self: center;
     width: 1em;
     height: 1em;
