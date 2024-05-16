@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { useRouter, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
 import { ref, watch } from 'vue'
+import router from '@/router'
+import { useUserStore } from '@/stores'
 
 // 标签路径
 const tabPath = ref('home')
@@ -12,7 +14,6 @@ const tabList = [
   { label: '消息中心', path: 'notify', iconName: 'home-notice' },
   { label: '我的', path: 'user', iconName: 'home-mine' }
 ]
-const router = useRouter()
 
 // 监听标签变化->路由变化
 watch(tabPath, (path) => {
@@ -24,7 +25,7 @@ watch(tabPath, (path) => {
   <div class="layout-page">
     <router-view></router-view>
     <!-- 绑定v-model，表示当前tab-pane的name属性 -->
-    <el-tabs v-model="tabPath" tab-position="bottom" stretch="true">
+    <el-tabs v-model="tabPath" tab-position="bottom" :stretch="true">
       <!-- v-for 循环渲染 -->
       <el-tab-pane v-for="tab in tabList" :key="tab.path" :name="tab.path">
         <template #label>

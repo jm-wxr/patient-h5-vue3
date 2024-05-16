@@ -18,8 +18,18 @@
 body {
   font-size: 14px;
   color: var(--cp-text1);
+  margin: 0;
 }
 h1,h2,h3,h4,h5,h6,p,ul,ol {
   margin: 0;
   padding: 0;
+}
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+// 加载进度插件样式修改
+#nprogress .bar {
+  background-color: var(--cp-primary) !important;
 }

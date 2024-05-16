@@ -1,0 +1,72 @@
+.patient-list {
+  margin-top: 10px;
+  padding: 15px;
+}
+.patient-item {
+  position: relative;
+  display: flex;
+  padding: 15px;
+  background-color: var(--cp-bg);
+  border-radius: 10px;
+  .info {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1;
+    span {
+      margin-right: 20px;
+      line-height: 30px;
+      color: var(--cp-tip);
+      &.name {
+        font-size: 16px;
+        color: var(--cp-text1);
+      }
+      &.id {
+        color: var(--cp-text2);
+      }
+    }
+  }
+  .tag {
+    position: absolute;
+    right: 30px;
+    top: 21px;
+    align-self: start;
+    padding: 2px 5px;
+    margin-right: 25px;
+    font-size: 10px;
+    background-color: var(--cp-primary);
+    color: #fff;
+    border-radius: 3px;
+  }
+  .svg-icon {
+    margin-left: 60px;
+    align-self: center;
+    width: 1em;
+    height: 1em;
+    color: var(--cp-tag);
+  }
+}
+.patient-add {
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+  padding: 20px 0;
+  background-color: var(--cp-bg);
+  border-radius: 10px;
+  span {
+    color: var(--cp-primary);
+  }
+}
+.patient-tip {
+  color: var(--cp-tag);
+}
+.el-drawer {
+  .el-form-item {
+    padding: 15px 0;
+    &.name, &.id {
+      border-bottom: 1px solid var(--cp-line);
+    }
+  }
+  .el-input {
+    height: 40px;
+  }
+}
