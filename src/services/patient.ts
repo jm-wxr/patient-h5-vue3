@@ -6,7 +6,17 @@ export const getPatientList = () => {
   return request<Patient[]>('/patient/mylist')
 }
 
-// 添加患者信息
-export const addPatientInfo = (patient: Patient) => {
+// 添加患者
+export const addPatient = (patient: Patient) => {
   return request('/patient/add', 'POST', patient)
+}
+
+// 编辑患者
+export const editPatient = (patient: Patient) => {
+  return request('/patient/update', 'PUT', patient)
+}
+
+// 删除患者
+export const deletePatient = (id: string) => {
+  return request(`/patient/del/${id}`, 'DELETE')
 }

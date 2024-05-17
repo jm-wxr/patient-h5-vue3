@@ -65,11 +65,19 @@
 .el-drawer {
   .el-form-item {
     padding: 15px 0;
+    :deep(.el-form-item__label) {
+      justify-content: flex-start;
+    }
     &.name, &.id {
       border-bottom: 1px solid var(--cp-line);
     }
+    .el-input {
+      height: 40px;
+    }
   }
-  .el-input {
-    height: 40px;
+  .el-button {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
   }
 }
