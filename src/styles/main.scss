@@ -18,18 +18,63 @@
 body {
   font-size: 14px;
   color: var(--cp-text1);
-  margin: 0;
 }
-h1,h2,h3,h4,h5,h6,p,ul,ol {
-  margin: 0;
+// 加载进度插件样式修改
+#nprogress .bar {
+  background-color: var(--cp-primary) !important;
+}
+
+// /* 设置网页统一的字体大小、行高、字体系列相关属性 */
+// body {
+//   font: 16px/1.5  "SimSun", "宋体", "Microsoft Yahei", "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", sans-serif;
+// 	color: #000;
+// }
+
+/* 去除常见标签默认的 margin 和 padding */
+* {
+	margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
+
+/*fieldset组合表单中的相关元素*/
+fieldset, img, input, button {
+    border: none;
+    padding: 0;
+    margin: 0;
+    outline-style: none;
+}
+
+/* 去除列表默认样式 */
+ul, ol {
+  list-style: none;
+}
+
+input {
+    padding-top: 0;
+    padding-bottom: 0;
+    font-family: "SimSun", "宋体";
+}
+
+/* 去除a标签默认下划线，并设置默认文字颜色 */
 a {
   text-decoration: none;
   color: #000;
 }
 
-// 加载进度插件样式修改
-#nprogress .bar {
-  background-color: var(--cp-primary) !important;
+/* 设置img的垂直对齐方式为居中对齐，去除img默认下间隙 */
+img {
+  border: 0;
+  width: 100%;
+  height: 100%;
+  vertical-align: middle;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+    font-size: 100%;
+}
+
+s, i, em {
+    font-style: normal;
 }

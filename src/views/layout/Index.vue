@@ -2,7 +2,8 @@
 import { RouterView } from 'vue-router'
 import { ref, watch } from 'vue'
 import router from '@/router'
-import { useUserStore } from '@/stores'
+import { useRoute } from 'vue-router'
+const route = useRoute()
 
 // 标签路径
 const tabPath = ref('home')
@@ -19,15 +20,26 @@ const tabList = [
 watch(tabPath, (path) => {
   router.push(`/${path}`)
 })
+
+// 监听路由变化->标签变化
+watch(
+  () => route.path,
+  (newPath) => {
+    const path = newPath.replace('/', '')
+    if (tabList.some((tab) => tab.path === path)) {
+      tabPath.value = path
+    }
+  }
+)
 </script>
 
 <template>
   <div class="layout-page">
-    <router-view style="min-height: calc(100vh - 50px)"></router-view>
     <!-- 绑定v-model，表示当前tab-pane的name属性 -->
     <el-tabs v-model="tabPath" tab-position="bottom" :stretch="true">
       <!-- v-for 循环渲染 -->
       <el-tab-pane v-for="tab in tabList" :key="tab.path" :name="tab.path">
+        <router-view style="min-height: calc(100vh - 50px)"></router-view>
         <template #label>
           <svg-icon
             :name="`${tab.iconName}-${tabPath === tab.path ? 'active' : 'default'}`"
@@ -44,11 +56,15 @@ watch(tabPath, (path) => {
   // 选择子组件的元素
   :deep() {
     .el-tabs {
+      // 标签栏吸底
+      &__header.is-bottom {
+        background-color: #fff;
+        position: sticky;
+        bottom: 0;
+      }
       &__item {
-        display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
+        margin: 8px 0;
       }
       .tab-label {
         font-size: 11px;

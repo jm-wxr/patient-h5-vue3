@@ -1,0 +1,90 @@
+.home-page {
+}
+// 头部
+.home-header {
+  height: 100px;
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 90px;
+    background: linear-gradient(180deg, rgba(62, 206, 197, 0.85), #26bcc6);
+    border-bottom-left-radius: 150px 20px; // 水平半径 垂直半径
+    border-bottom-right-radius: 150px 20px;
+  }
+  .content {
+    position: relative;
+    padding: 20px 15px;
+    h1 {
+      font-size: 18px;
+      color: #fff;
+      font-weight: normal;
+      line-height: 1;
+      padding-left: 5px;
+      padding-bottom: 20px;
+    }
+    .search {
+      display: flex;
+      align-items: center;
+      height: 40px;
+      padding: 0 20px;
+      box-shadow: 0 15px 22px -7px rgba(224, 236, 250, 0.8);
+      background-color: #fff;
+      border-radius: 20px;
+      font-size: 13px;
+      color: var(--cp-dark);
+      .svg-icon {
+        width: 16px;
+        height: 16px;
+        margin-right: 5px;
+      }
+    }
+  }
+}
+// 导航
+.home-nav {
+  padding: 20px;
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+  .large {
+    margin-bottom: 15px;
+    .svg-icon {
+      width: 45px;
+      aspect-ratio: 1;
+    }
+    .title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .desc {
+      font-size: 12px;
+      color: var(--cp-dark);
+    }
+  }
+  .small {
+    .svg-icon {
+      width: 30px;
+      aspect-ratio: 1;
+    }
+  }
+}
+// 轮播图
+.home-swiper {
+  padding: 10px 15px;
+}
+// tabs
+// tabs__header吸顶效果
+:deep(.el-tabs__nav) {
+  padding-left: 15px;
+}
+:deep(.el-tabs__header.sticky){
+  background-color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}

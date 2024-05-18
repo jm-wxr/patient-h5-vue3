@@ -46,7 +46,7 @@ importers:
         specifier: ^20.1.4
         version: 20.1.4
       '@types/node':
-        specifier: ^20.12.5
+        specifier: ^20.12.11
         version: 20.12.11
       '@types/nprogress':
         specifier: ^0.2.3
