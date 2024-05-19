@@ -78,6 +78,9 @@ importers:
       cz-conventional-changelog:
         specifier: ^3.3.0
         version: 3.3.0(@types/node@20.12.11)(typescript@5.4.5)
+      cz-custom:
+        specifier: ^0.0.2
+        version: 0.0.2
       cz-customizable:
         specifier: ^7.0.0
         version: 7.0.0
@@ -1096,6 +1099,10 @@ packages:
   cz-conventional-changelog@3.3.0:
     resolution: {integrity: sha512-U466fIzU5U22eES5lTNiNbZ+d8dfcHcssH4o7QsdWaCcRs/feIPCxKYSWkYBNs5mny7MvEfwpTLWjvbm94hecw==}
     engines: {node: '>= 10'}
+
+  cz-custom@0.0.2:
+    resolution: {integrity: sha512-vT82MJ1QhgPgvOrIs9thqvSonqOmGETnfcUDMT3zPmLNSeaszhQ6jtlGaTRQ6egqWVuiQAC7Tc3/Ad/LKrPYdw==}
+    hasBin: true
 
   cz-customizable@7.0.0:
     resolution: {integrity: sha512-pQKkGSm+8SY9VY/yeJqDOla1MjrGaG7WG4EYLLEV4VNctGO7WdzdGtWEr2ydKSkrpmTs7f8fmBksg/FaTrUAyw==}
@@ -4119,6 +4126,15 @@ snapshots:
     transitivePeerDependencies:
       - '@types/node'
       - typescript
+
+  cz-custom@0.0.2:
+    dependencies:
+      editor: 1.0.0
+      find-config: 1.0.0
+      inquirer: 8.2.5
+      lodash: 4.17.21
+      temp: 0.9.4
+      word-wrap: 1.2.5
 
   cz-customizable@7.0.0:
     dependencies:

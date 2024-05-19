@@ -14,13 +14,14 @@ module.exports = {
     { value: 'revert', name: 'revert:   回退到一个提交记录' },
     { value: 'build', name: 'build:    打包' }
   ],
-  scopes:[{ name: 'accounts' }, { name: 'admin' }, { name: 'exampleScope' }],
+  // scope的选项
+  scopes:[{name: 'empty'}, {name: 'custom'}],
   // 覆盖消息，默认值如下：
   messages: {
     type: '请选择提交类型:',
-    scope: '请输入文件修改范围(可选):',
+    scope: '请选择修改范围(可选):',
     // 当allowCustomScopes为true时使用
-    // customScope: '请输入此更改范围 (可选):',
+    customScope: '请输入修改范围 (可选，默认为custom):',
     subject: '请简要描述提交 (必填):',
     body: '请输入详细描述 (跳过即可):',
     breaking: '列出任何破坏性更改 (可选):\n',
@@ -32,5 +33,5 @@ module.exports = {
   // 跳过你想跳过的问题
   skipQuestions: ['body', 'footer'],
   // 限制提交信息长度, commitlint默认是72
-  subjectLimit: 72
+  subjectLimit: 72,
 }
