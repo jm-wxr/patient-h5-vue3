@@ -1,32 +1,37 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { Knowledge } from '@/types/consult'
+import { useFollow } from '@/composable'
+
+defineProps<{ item: Knowledge }>()
+const { loading, follow } = useFollow()
+</script>
 
 <template>
   <div class="knowledge-card">
     <div class="head">
       <img src="https://yanxuan-item.nosdn.127.net/9ad83e8d9670b10a19b30596327cfd14.png" alt="" />
       <div class="info">
-        <p class="name">王医生</p>
-        <p class="dep">中山大学肿瘤防治中心 肠胃外科 副主治医师</p>
+        <p class="name">{{ item.creatorName }}</p>
+        <p class="dep">
+          {{ item.creatorHospatalName }} {{ item.creatorDep }} {{ item.creatorTitles }}
+        </p>
       </div>
-      <el-button>+关注</el-button>
+      <el-button :loading="loading" @click="follow(item)">
+        {{ item.likeFlag === 1 ? '已关注' : '+关注' }}
+      </el-button>
     </div>
     <div class="body">
-      <h3 class="title">克服面试紧张的技巧</h3>
+      <h3 class="title">{{ item.title }}</h3>
       <p class="tag">
-        <span># 面试</span>
-        <span># 紧张</span>
+        <span v-for="(tag, i) in item.topics" :key="i"># {{ tag }}</span>
       </p>
-      <p class="intro">
-        克服面试紧张的技巧，克服面试紧张的技巧，克服面试紧张的技巧，克服面试紧张的技巧，克服面试紧张的技巧，克服面试紧张的技巧，克服面试紧张的技巧，
-      </p>
+      <p class="intro">{{ item.content.replace(/<[^>]+>/g, '') }}</p>
       <div class="imgs">
-        <img src="https://yanxuan-item.nosdn.127.net/c1cdf62c5908659a9e4c8c2f9df218fd.png" alt="" />
-        <img src="https://yanxuan-item.nosdn.127.net/c1cdf62c5908659a9e4c8c2f9df218fd.png" alt="" />
-        <img src="https://yanxuan-item.nosdn.127.net/c1cdf62c5908659a9e4c8c2f9df218fd.png" alt="" />
+        <img v-for="(url, i) in item.coverUrl" :key="i" :src="url" />
       </div>
       <p class="logs">
-        <span>10 收藏</span>
-        <span>7 评论</span>
+        <span>{{ item.collectionNumber }} 收藏</span>
+        <span>{{ item.commentNumber }} 评论</span>
       </p>
     </div>
   </div>

@@ -2,6 +2,7 @@
 import ad from '@/assets/ad.png'
 import { onMounted, onUnmounted, ref } from 'vue'
 import KnowledgeList from './components/KnowledgeList.vue'
+import FollowDoctor from './components/FollowDoctor.vue'
 
 const largeNavList = [
   { iconPath: 'home-doctor', title: '问医生', desc: '按科室查问医生' },
@@ -83,11 +84,18 @@ onUnmounted(() => {
     <div class="home-tabs">
       <el-tabs v-model="active">
         <el-tab-pane label="关注">
-          <knowledge-list />
+          <follow-doctor />
+          <knowledge-list type="like" />
         </el-tab-pane>
-        <el-tab-pane label="推荐">2</el-tab-pane>
-        <el-tab-pane label="减脂">3</el-tab-pane>
-        <el-tab-pane label="饮食">4</el-tab-pane>
+        <el-tab-pane label="推荐">
+          <knowledge-list type="recommend" />
+        </el-tab-pane>
+        <el-tab-pane label="减脂">
+          <knowledge-list type="fatReduction" />
+        </el-tab-pane>
+        <el-tab-pane label="饮食">
+          <knowledge-list type="food" />
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>

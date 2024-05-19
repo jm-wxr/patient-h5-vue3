@@ -33,11 +33,11 @@ watchEffect(() => {
 
 <template>
   <div class="layout-page">
+    <router-view style="min-height: calc(100vh - 50px)"></router-view>
     <!-- 绑定v-model，表示当前tab-pane的name属性 -->
     <el-tabs v-model="currentIndex" tab-position="bottom" :stretch="true">
       <!-- v-for 循环渲染 -->
       <el-tab-pane v-for="tab in tabList" :key="tab.index" :name="tab.index">
-        <router-view style="min-height: calc(100vh - 50px)"></router-view>
         <template #label>
           <svg-icon
             :name="`${tab.iconName}-${currentIndex === tab.index ? 'active' : 'default'}`"
@@ -52,24 +52,21 @@ watchEffect(() => {
 <style lang="scss" scoped>
 .layout-page {
   // 选择子组件的元素
-  :deep() {
-    .el-tabs {
-      // 标签栏吸底
-      &__header.is-bottom {
-        background-color: #fff;
-        position: sticky;
-        bottom: 0;
-      }
-      &__item {
-        flex-direction: column;
-        margin: 8px 0;
-      }
-      .tab-label {
-        font-size: 11px;
-      }
-      .svg-icon {
-        width: 24px;
-      }
+  :deep(.el-tabs--bottom) {
+    // 标签栏吸底
+    background-color: #fff;
+    position: sticky;
+    bottom: 0;
+    z-index: 99;
+    .el-tabs__item {
+      flex-direction: column;
+      margin: 8px 0;
+    }
+    .tab-label {
+      font-size: 11px;
+    }
+    .svg-icon {
+      width: 24px;
     }
   }
 }

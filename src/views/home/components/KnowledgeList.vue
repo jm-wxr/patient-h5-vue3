@@ -1,13 +1,31 @@
 <script setup lang="ts">
+import type { KnowledgeList, KnowledgeParams, KnowledgeType } from '@/types/consult'
 import KnowledgeCard from './KnowledgeCard.vue'
+import { onMounted } from 'vue'
+import { getKownledgePage } from '@/services/consult'
+import { ref } from 'vue'
+
+const prop = defineProps<{ type: KnowledgeType }>()
+const params = ref<KnowledgeParams>({
+  type: prop.type,
+  current: 1,
+  pageSize: 10
+})
+const list = ref<KnowledgeList>([])
+onMounted(async () => {
+  const res = await getKownledgePage(params.value)
+  list.value.push(...res.data.rows)
+})
 </script>
 
 <template>
   <div class="konwledge-list">
-    <div v-for="i in 5" :key="i">
-      <knowledge-card></knowledge-card>
-      <el-divider></el-divider>
-    </div>
+    <ul class="list">
+      <li v-for="item in list" :key="item.id">
+        <knowledge-card :item="item" />
+        <el-divider />
+      </li>
+    </ul>
   </div>
 </template>
 

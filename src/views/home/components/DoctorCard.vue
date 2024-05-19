@@ -1,0 +1,63 @@
+<script setup lang="ts">
+import type { Doctor } from '@/types/consult'
+import { useFollow } from '@/composable'
+
+defineProps<{ item: Doctor }>()
+const { loading, follow } = useFollow()
+</script>
+
+<template>
+  <div class="doctor-card">
+    <el-image :src="item.avatar"></el-image>
+    <p class="name">{{ item.name }}</p>
+    <p class="hospital">{{ item.hospitalName }} {{ item.depName }}</p>
+    <p>{{ item.positionalTitles }}</p>
+    <el-button :loading="loading" type="primary" @click="follow(item)">
+      {{ item.likeFlag === 1 ? '已关注' : '+ 关注' }}
+    </el-button>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+.doctor-card {
+  width: 135px;
+  height: 190px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0px 0px 11px 0px rgba(229, 229, 229, 0.2);
+  text-align: center;
+  padding: 15px;
+  display: inline-block;
+  box-sizing: border-box;
+  .el-image {
+    width: 58px;
+    height: 58px;
+    vertical-align: top;
+    border-radius: 50%;
+    margin: 0 auto 8px;
+  }
+  p {
+    margin-bottom: 0;
+    font-size: 11px;
+    color: var(--cp-tip);
+    &.name {
+      font-size: 13px;
+      color: var(--cp-text1);
+      margin-bottom: 5px;
+    }
+    &.hospital {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+  }
+  .el-button {
+    padding: 0 12px;
+    height: 28px;
+    margin-top: 8px;
+    width: 72px;
+    border-radius: 20px;
+  }
+}
+</style>
