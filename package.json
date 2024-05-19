@@ -14,7 +14,7 @@
     "prepare": "husky",
     "lint-staged": "lint-staged",
     "commitlint": "commitlint --edit",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -w -r 0"
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
@@ -42,6 +42,7 @@
     "commitizen": "^4.3.0",
     "commitlint": "^19.3.0",
     "cz-conventional-changelog": "^3.3.0",
+    "cz-customizable": "^7.0.0",
     "eslint": "^8.57.0",
     "eslint-plugin-vue": "^9.23.0",
     "husky": "^9.0.11",
@@ -67,7 +68,10 @@
   "packageManager": "pnpm@9.1.1+sha512.14e915759c11f77eac07faba4d019c193ec8637229e62ec99eefb7cf3c3b75c64447882b7c485142451ee3a6b408059cdfb7b7fa0341b975f12d0f7629c71195",
   "config": {
     "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
+      "path": "node_modules/cz-customizable"
+    },
+    "cz-customizable": {
+      "config": ".cz-config.ts"
     }
   }
 }

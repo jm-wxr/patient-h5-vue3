@@ -44,14 +44,13 @@ const router = createRouter({
           path: '/user',
           component: () => import('@/views/user/Index.vue'),
           meta: { title: '个人中心' }
-        },
-        // 路由必须设置在这一级，因为同级路由切换时，不会销毁组件，以避免layout组件不必要的重复渲染。
-        {
-          path: '/user/patient',
-          component: () => import('@/views/user/PatientPage.vue'),
-          meta: { title: '家庭档案' }
         }
       ]
+    },
+    {
+      path: '/user/patient',
+      component: () => import('@/views/user/PatientPage.vue'),
+      meta: { title: '家庭档案' }
     }
   ]
 })
