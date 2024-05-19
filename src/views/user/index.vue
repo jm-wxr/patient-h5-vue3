@@ -22,10 +22,10 @@ const user = reactive<UserInfo>({
   }
 } as UserInfo)
 const tools = [
-  { label: '我的问诊', path: '/user/consult' },
+  { label: '我的问诊', path: '/user' },
   { label: '我的处方', path: '/user' },
   { label: '家庭档案', path: '/user/patient' },
-  { label: '地址管理', path: '/user/address' },
+  { label: '地址管理', path: '/user' },
   { label: '我的评价', path: '/user' },
   { label: '官方客服', path: '/user' },
   { label: '设置', path: '/user' }
@@ -81,7 +81,7 @@ const logout = async () => {
     <div class="user-page-order">
       <div class="head">
         <h3>药品订单</h3>
-        <router-link to="/order">
+        <router-link to="/">
           全部订单
           <ArrowRight style="width: 1em"></ArrowRight>
         </router-link>

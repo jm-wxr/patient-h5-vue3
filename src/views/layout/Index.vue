@@ -1,48 +1,46 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import { ref, watch } from 'vue'
+import { ref, watch, watchEffect } from 'vue'
 import router from '@/router'
 import { useRoute } from 'vue-router'
-const route = useRoute()
 
-// 标签路径
-const tabPath = ref('home')
+// 当前标签索引
+const currentIndex = ref()
+const route = useRoute()
 
 // 标签列表
 const tabList = [
-  { label: '首页', path: 'home', iconName: 'home-index' },
-  { label: '健康百科', path: 'article', iconName: 'home-article' },
-  { label: '消息中心', path: 'notify', iconName: 'home-notice' },
-  { label: '我的', path: 'user', iconName: 'home-mine' }
+  { label: '首页', path: 'home', iconName: 'home-index', index: 0 },
+  { label: '健康百科', path: 'article', iconName: 'home-article', index: 1 },
+  { label: '消息中心', path: 'notify', iconName: 'home-notice', index: 2 },
+  { label: '我的', path: 'user', iconName: 'home-mine', index: 3 }
 ]
 
 // 监听标签变化->路由变化
-watch(tabPath, (path) => {
-  router.push(`/${path}`)
+watch(currentIndex, (index) => {
+  router.push(`/${tabList[index].path}`)
 })
 
 // 监听路由变化->标签变化
-watch(
-  () => route.path,
-  (newPath) => {
-    const path = newPath.replace('/', '')
-    if (tabList.some((tab) => tab.path === path)) {
-      tabPath.value = path
-    }
+watchEffect(() => {
+  const path = route.path.replace('/', '')
+  const index = tabList.findIndex((tab) => tab.path === path)
+  if (index !== -1) {
+    currentIndex.value = index
   }
-)
+})
 </script>
 
 <template>
   <div class="layout-page">
     <!-- 绑定v-model，表示当前tab-pane的name属性 -->
-    <el-tabs v-model="tabPath" tab-position="bottom" :stretch="true">
+    <el-tabs v-model="currentIndex" tab-position="bottom" :stretch="true">
       <!-- v-for 循环渲染 -->
-      <el-tab-pane v-for="tab in tabList" :key="tab.path" :name="tab.path">
+      <el-tab-pane v-for="tab in tabList" :key="tab.index" :name="tab.index">
         <router-view style="min-height: calc(100vh - 50px)"></router-view>
         <template #label>
           <svg-icon
-            :name="`${tab.iconName}-${tabPath === tab.path ? 'active' : 'default'}`"
+            :name="`${tab.iconName}-${currentIndex === tab.index ? 'active' : 'default'}`"
           ></svg-icon>
           <span class="tab-label">{{ tab.label }}</span>
         </template>
