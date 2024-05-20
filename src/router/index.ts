@@ -2,7 +2,6 @@ import { useUserStore } from '@/stores'
 import { createRouter, createWebHistory } from 'vue-router'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-import Layout from '@/views/layout/Index.vue'
 
 // 加载进度插件配置
 NProgress.configure({ showSpinner: false })
@@ -51,6 +50,21 @@ const router = createRouter({
       path: '/user/patient',
       component: () => import('@/views/user/PatientPage.vue'),
       meta: { title: '家庭档案' }
+    },
+    {
+      path: '/consult/fast',
+      component: () => import('@/views/consult/ConsultFast.vue'),
+      meta: { title: '极速问诊' }
+    },
+    {
+      path: '/consult/dep',
+      component: () => import('@/views/consult/ConsultDep.vue'),
+      meta: { title: '选择科室' }
+    },
+    {
+      path: '/consult/illness',
+      component: () => import('@/views/consult/ConsultIllness.vue'),
+      meta: { title: '病情描述' }
     }
   ]
 })

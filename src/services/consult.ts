@@ -3,7 +3,8 @@ import type {
   DoctorPage,
   KnowledgePage,
   KnowledgeParams,
-  LikeType
+  LikeType,
+  TopDep
 } from '@/types/consult'
 import request from '@/utils/request'
 
@@ -20,4 +21,9 @@ export const getDoctorPage = (params: DocParams) => {
 // 关注操作
 export const like = (type: LikeType, id: string) => {
   return request('/like', 'POST', { type, id })
+}
+
+// 获取科室列表
+export const getAllDep = () => {
+  return request<TopDep[]>('/dep/all')
 }

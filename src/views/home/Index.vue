@@ -5,9 +5,19 @@ import KnowledgeList from './components/KnowledgeList.vue'
 import FollowDoctor from './components/FollowDoctor.vue'
 
 const largeNavList = [
-  { iconPath: 'home-doctor', title: '问医生', desc: '按科室查问医生' },
-  { iconPath: 'home-graphic', title: '技术问诊', desc: '20s医生极速回复' },
-  { iconPath: 'home-prescribe', title: '开药门诊', desc: '线上买药史方便' }
+  { iconPath: 'home-doctor', title: '问医生', desc: '按科室查问医生', routePath: '/home' },
+  {
+    iconPath: 'home-graphic',
+    title: '技术问诊',
+    desc: '20s医生极速回复',
+    routePath: '/consult/fast'
+  },
+  {
+    iconPath: 'home-prescribe',
+    title: '开药门诊',
+    desc: '线上买药史方便',
+    routePath: '/home'
+  }
 ]
 const smallNavList = [
   { iconPath: 'home-order', title: '药品订单' },
@@ -56,7 +66,7 @@ onUnmounted(() => {
     <div class="home-nav">
       <el-row class="large">
         <el-col v-for="item in largeNavList" :key="item.title" :span="8">
-          <router-link to="/" class="nav-item">
+          <router-link class="nav-item" :to="item.routePath">
             <svg-icon :name="item.iconPath"></svg-icon>
             <p class="title">{{ item.title }}</p>
             <p class="desc">{{ item.desc }}</p>

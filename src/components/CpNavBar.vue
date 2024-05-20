@@ -34,18 +34,32 @@ const onClickRight = () => {
 
 <style lang="scss" scoped>
 .cp-nav-bar {
+  height: 50px;
   border-bottom: 1px solid var(--cp-line);
   padding: 15px;
 }
 // 深度作用其他组件样式
-:deep() {
-  .el-page-header__icon {
+.el-page-header {
+  :deep(.el-page-header__icon) {
     font-size: 18px;
     color: var(--cp-text1);
+  }
+  :deep(.el-page-header__content) {
+    padding-left: 50px;
   }
   .right-text {
     font-size: 16px;
     color: var(--cp-primary);
   }
 }
+// :deep() {
+//   .el-page-header__icon {
+//     font-size: 18px;
+//     color: var(--cp-text1);
+//   }
+//   .right-text {
+//     font-size: 16px;
+//     color: var(--cp-primary);
+//   }
+// }
 </style>
