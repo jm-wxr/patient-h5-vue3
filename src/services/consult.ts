@@ -4,6 +4,7 @@ import type {
   KnowledgePage,
   KnowledgeParams,
   LikeType,
+  Picture,
   TopDep
 } from '@/types/consult'
 import request from '@/utils/request'
@@ -26,4 +27,11 @@ export const like = (type: LikeType, id: string) => {
 // 获取科室列表
 export const getAllDep = () => {
   return request<TopDep[]>('/dep/all')
+}
+
+// 上传图片
+export const uploadImage = (file: File) => {
+  const fd = new FormData()
+  fd.append('file', file)
+  return request<Picture>('/upload', 'POST', fd)
 }

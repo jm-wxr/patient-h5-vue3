@@ -1,10 +1,62 @@
 <script setup lang="ts">
-const options = [
+import type { ConsultIllness } from '@/types/consult'
+import { ref, watch } from 'vue'
+import { Upload } from '@element-plus/icons-vue'
+import { type UploadFile, type UploadUserFile } from 'element-plus'
+import { uploadImage } from '@/services/consult'
+
+const timeOptions = [
   { label: '一周内', value: '1' },
   { label: '一月内', value: '2' },
   { label: '半年内', value: '3' },
   { label: '大于半年', value: '4' }
 ]
+const flagOptions = [
+  { label: '就诊过', value: '1' },
+  { label: '没就诊过', value: '2' }
+]
+const form = ref<ConsultIllness>({
+  illnessDesc: '',
+  illnessTime: undefined,
+  consultFlag: undefined,
+  pictures: []
+})
+// 已添加的文件列表
+const fileList = ref<UploadUserFile[]>([])
+
+// 列表改变(添加图片)
+watch(
+  () => fileList.value,
+  async (value, oldValue) => {
+    if (value.length < oldValue.length) {
+      return
+    }
+    // 添加图片
+    const file = fileList.value[fileList.value.length - 1]
+    file.status = 'uploading'
+    try {
+      const res = await uploadImage(file.raw!)
+      form.value.pictures?.push(res.data)
+      file.url = res.data.url
+      file.status = 'ready'
+      ElMessage.success('上传成功')
+    } catch (err) {
+      console.log(err)
+      fileList.value.pop()
+      ElMessage.error('上传失败')
+    }
+    console.log(form.value.pictures)
+  }
+)
+// 删除图片
+const onRemove = (item: UploadFile) => {
+  form.value.pictures = form.value.pictures?.filter((pic) => pic.url !== item.url)
+}
+
+// 点击下一步
+const next = () => {
+  console.log(form.value)
+}
 </script>
 
 <template>
@@ -21,10 +73,12 @@ const options = [
         </p>
       </div>
     </div>
+    <el-divider></el-divider>
     <div class="illness-form">
-      <el-form>
-        <el-form-item>
+      <el-form :model="form">
+        <el-form-item prop="illnessDesc">
           <el-input
+            v-model="form.illnessDesc"
             type="textarea"
             rows="5"
             placeholder="请详细描述您的病情，病情描述不能为空"
@@ -32,11 +86,28 @@ const options = [
         </el-form-item>
         <p>本次患病多久了？</p>
         <el-form-item>
-          <cp-radio-btn :options="options"></cp-radio-btn>
+          <cp-radio-btn :options="timeOptions" v-model="form.illnessTime"></cp-radio-btn>
         </el-form-item>
-        <el-form-item label="上传图片"></el-form-item>
+        <p>此次病情是否去医院就诊过？</p>
         <el-form-item>
-          <el-button type="primary">提交</el-button>
+          <cp-radio-btn :options="flagOptions" v-model="form.consultFlag"></cp-radio-btn>
+        </el-form-item>
+        <el-form-item class="form-upload">
+          <el-upload
+            v-model:file-list="fileList"
+            :auto-upload="false"
+            list-type="picture-card"
+            :on-remove="onRemove"
+          >
+            <div class="content">
+              <Upload style="width: 30px" />
+              <p>上传图片</p>
+            </div>
+          </el-upload>
+          <p class="tip">上传内容仅医生可见，最多9张图，最大5MB</p>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="next">下一步</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -47,7 +118,7 @@ const options = [
 .consult-illness-page {
   .illness-tip {
     display: flex;
-    padding: 20px 15px;
+    padding: 20px 15px 0px;
     img {
       width: 60px;
       height: 60px;
@@ -81,8 +152,36 @@ const options = [
     }
   }
   .illness-form {
-    padding: 20px;
+    padding: 0px 20px;
     background-color: #fff;
+    :deep(.form-upload) {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      .el-upload {
+        margin-right: 10px;
+        &.el-upload--picture-card {
+          --el-upload-picture-card-size: 80px;
+        }
+      }
+      .content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        p {
+          font-size: 12px;
+          color: var(--cp-dark);
+        }
+      }
+      .tip {
+        font-size: 12px;
+        color: var(--cp-tip);
+      }
+    }
+    .el-button {
+      width: 100%;
+      margin-top: 20px;
+    }
   }
 }
 </style>

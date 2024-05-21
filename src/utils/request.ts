@@ -22,7 +22,6 @@ instance.interceptors.request.use(
     // 在发送请求之前做些什么
     if (useStore.user?.token) {
       config.headers['Authorization'] = `Bearer ${useStore.user.token}`
-      config.headers['Content-Type'] = 'application/json'
     }
     return config
   },
