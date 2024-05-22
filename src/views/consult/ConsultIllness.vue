@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import type { ConsultIllness } from '@/types/consult'
-import { ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { Upload } from '@element-plus/icons-vue'
 import { type UploadFile, type UploadUserFile } from 'element-plus'
 import { uploadImage } from '@/services/consult'
+import { useConsultStore } from '@/stores'
+import router from '@/router'
 
 const timeOptions = [
   { label: '一周内', value: '1' },
@@ -23,6 +25,19 @@ const form = ref<ConsultIllness>({
 })
 // 已添加的文件列表
 const fileList = ref<UploadUserFile[]>([])
+const store = useConsultStore()
+
+onMounted(async () => {
+  // 数据回显
+  if (store.consult.illnessDesc) {
+    await ElMessageBox.confirm('是否恢复您之前填写的病情信息？', '温馨提示')
+    const { illnessDesc, illnessTime, consultFlag, pictures } = store.consult
+    form.value = { illnessDesc, illnessTime, consultFlag, pictures }
+    pictures?.forEach(async (item) => {
+      fileList.value.push({ name: item.id, url: item.url })
+    })
+  }
+})
 
 // 列表改变(添加图片)
 watch(
@@ -45,9 +60,13 @@ watch(
       fileList.value.pop()
       ElMessage.error('上传失败')
     }
-    console.log(form.value.pictures)
   }
 )
+// 按钮禁用状态
+const disabled = computed(() => {
+  return !form.value.illnessDesc || !form.value.illnessTime || !form.value.consultFlag
+})
+
 // 删除图片
 const onRemove = (item: UploadFile) => {
   form.value.pictures = form.value.pictures?.filter((pic) => pic.url !== item.url)
@@ -55,7 +74,11 @@ const onRemove = (item: UploadFile) => {
 
 // 点击下一步
 const next = () => {
-  console.log(form.value)
+  if (!form.value.illnessDesc) return ElMessage.warn('请输入病情描述')
+  if (!form.value.illnessTime) return ElMessage.warn('请选择症状持续时间')
+  if (!form.value.consultFlag) return ElMessage.warn('请选择是否已经就诊s')
+  store.setIllness(form.value)
+  router.push('/user/patient?isChange=1')
 }
 </script>
 
@@ -107,7 +130,7 @@ const next = () => {
           <p class="tip">上传内容仅医生可见，最多9张图，最大5MB</p>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="next">下一步</el-button>
+          <el-button :class="{ disabled }" @click="next" type="primary" round>下一步</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -158,6 +181,10 @@ const next = () => {
       display: flex;
       flex-direction: row;
       align-items: center;
+      .el-upload-list__item {
+        width: 80px;
+        height: 80px;
+      }
       .el-upload {
         margin-right: 10px;
         &.el-upload--picture-card {
@@ -180,7 +207,14 @@ const next = () => {
     }
     .el-button {
       width: 100%;
+      height: 40px;
       margin-top: 20px;
+      &.disabled {
+        opacity: 1;
+        background: #fafafa;
+        color: #d9dbde;
+        border: #fafafa;
+      }
     }
   }
 }

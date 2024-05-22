@@ -20,3 +20,8 @@ export const editPatient = (patient: Patient) => {
 export const deletePatient = (id: string) => {
   return request(`/patient/del/${id}`, 'DELETE')
 }
+
+// 查询患者详情
+export const getPatientInfo = (id: string) => {
+  return request<Patient>(`/patient/info/${id}`)
+}

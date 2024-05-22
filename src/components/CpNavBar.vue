@@ -24,7 +24,7 @@ const onClickRight = () => {
 
 <template>
   <el-page-header :icon="ArrowLeft" @back="onBack" class="cp-nav-bar">
-    <template v-slot:title>{{ title }}</template>
+    <template v-slot:title>{{ title || '返回' }}</template>
     <template v-slot:content>{{ content }}</template>
     <template v-slot:extra>
       <el-text class="right-text" @click="onClickRight">{{ rightText }}</el-text>
@@ -44,8 +44,12 @@ const onClickRight = () => {
     font-size: 18px;
     color: var(--cp-text1);
   }
+  :deep(.el-page-header__left) {
+    flex: 1;
+  }
   :deep(.el-page-header__content) {
-    padding-left: 50px;
+    flex: 1;
+    text-align: center;
   }
   .right-text {
     font-size: 16px;

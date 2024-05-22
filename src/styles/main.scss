@@ -1,6 +1,7 @@
 :root {
   // 问诊患者：色板
   --cp-primary: #16C2A3;
+  --cp-primary-bg: #e7f7f5;
   --cp-plain: #EAF8F6;
   --cp-orange: #FCA21C;
   --cp-text1: #121826;
@@ -22,6 +23,12 @@ body {
 // 加载进度插件样式修改
 #nprogress .bar {
   background-color: var(--cp-primary) !important;
+}
+
+:deep(.el-drawer) {
+  el-drawer__body {
+    padding: 0;
+  }
 }
 
 // /* 设置网页统一的字体大小、行高、字体系列相关属性 */
@@ -70,10 +77,11 @@ img {
   vertical-align: middle;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-weight: normal;
-    font-size: 100%;
-}
+/* 去除标题默认的字体样式 */
+// h1, h2, h3, h4, h5, h6 {
+//     font-weight: normal;
+//     font-size: 100%;
+// }
 
 s, i, em {
     font-style: normal;

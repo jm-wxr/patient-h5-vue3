@@ -1,14 +1,25 @@
 <script setup lang="ts">
 import { Plus } from '@element-plus/icons-vue'
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import type { Patient } from '@/types/patient'
 import { addPatient, deletePatient, editPatient, getPatientList } from '@/services/patient'
 import type { FormInstance, FormRules } from 'element-plus'
 import { idCardRules, nameRules } from '@/utils/rules'
+import { useConsultStore } from '@/stores'
+import { useRoute } from 'vue-router'
+import router from '@/router'
+
+const route = useRoute()
+const store = useConsultStore()
 
 // 患者列表
 const list = ref<Patient[]>([])
+// 控制抽屉显示
 const isShow = ref<boolean>(false)
+// 判断是否为选择患者页面
+const isChange = computed(() => route.query.isChange === '1')
+// 选择的患者id
+const patientId = ref<string>()
 // 传给cp-radio-btn子组件的数据
 const options = [
   { label: '男', value: 1 },
@@ -41,6 +52,10 @@ const defaultFlag = computed({
 const loadList = async () => {
   const res = await getPatientList()
   list.value = res.data
+  if (isChange.value && list.value.length) {
+    const defPatient = list.value.find((item) => item.defaultFlag === 1)
+    patientId.value = defPatient ? defPatient.id : list.value[0].id
+  }
 }
 
 onMounted(async () => {
@@ -89,13 +104,37 @@ const remove = async () => {
     ElMessage.success('删除成功')
   }
 }
+
+// 选择患者
+const onSelected = (id?: string) => {
+  if (isChange.value) {
+    patientId.value = id
+  }
+}
+
+// 下一步
+const next = () => {
+  if (!patientId.value) return ElMessage.warning('请选择就诊患者')
+  store.setPatientId(patientId.value)
+  router.push('/consult/pay')
+}
 </script>
 
 <template>
   <div class="patient-page">
-    <cp-nav-bar title="返回" content="家庭档案"></cp-nav-bar>
-    <el-space direction="vertical" :size="15" :fill="true" class="patient-list">
-      <div v-for="item in list" :key="item.id" class="patient-item">
+    <cp-nav-bar title="返回" :content="isChange ? '选择档案' : '家庭档案'" />
+    <div class="patient-change" v-if="isChange">
+      <h3>请选择患者信息</h3>
+      <p>以便医生给出更准确的治疗，信息仅医生可见</p>
+    </div>
+    <el-space direction="vertical" :size="15" fill class="patient-list" style="width: 100%">
+      <div
+        v-for="item in list"
+        :key="item.id"
+        class="patient-item"
+        :class="{ selected: patientId === item.id }"
+        @click="onSelected(item.id)"
+      >
         <div class="info">
           <span class="name">{{ item.name }}</span>
           <!-- 对身份证号码进行隐私处理 -->
@@ -112,41 +151,54 @@ const remove = async () => {
       </div>
       <div class="patient-tip">最多可添加6人</div>
     </el-space>
+    <div class="patient-next" v-if="isChange">
+      <el-button @click="next" type="primary" size="large" round>下一步</el-button>
+    </div>
   </div>
-  <el-drawer
-    v-model="isShow"
-    :show-close="false"
-    :with-header="false"
-    size="100%"
-    :destroy-on-close="true"
-  >
-    <cp-nav-bar
-      title="返回"
-      :content="patient.id ? '编辑患者' : '添加患者'"
-      right-text="保存"
-      :back="
-        () => {
-          isShow = false
-        }
-      "
-      @click-right="onSubmit"
-    ></cp-nav-bar>
-    <el-form ref="formRef" :model="patient" :rules="rules" autocomplete="off">
-      <el-form-item label="真实姓名" label-width="100px" prop="name" class="name">
-        <el-input placeholder="请输入真实姓名" v-model="patient.name"></el-input>
-      </el-form-item>
-      <el-form-item label="身份证号" label-width="100px" prop="idCard" class="id">
-        <el-input placeholder="请输入身份证号" v-model="patient.idCard"></el-input>
-      </el-form-item>
-      <el-form-item label="性别" label-width="100px" prop="gender" :required="true">
-        <cp-radio-btn :options="options" v-model="patient.gender"></cp-radio-btn>
-      </el-form-item>
-      <el-form-item label="默认就诊人" label-width="100px" prop="defaultFlag">
-        <el-checkbox v-model="defaultFlag"></el-checkbox>
-      </el-form-item>
-    </el-form>
-    <el-button v-if="patient.id" type="danger" @click="remove">删除</el-button>
-  </el-drawer>
+  <div class="patient-drawer">
+    <el-drawer
+      v-model="isShow"
+      :show-close="false"
+      :with-header="false"
+      size="100%"
+      :destroy-on-close="true"
+    >
+      <cp-nav-bar
+        title="返回"
+        :content="patient.id ? '编辑患者' : '添加患者'"
+        right-text="保存"
+        :back="
+          () => {
+            isShow = false
+          }
+        "
+        @click-right="onSubmit"
+      ></cp-nav-bar>
+      <el-form ref="formRef" :model="patient" :rules="rules" autocomplete="off">
+        <el-form-item label="真实姓名" label-width="100px" prop="name" class="name">
+          <el-input placeholder="请输入真实姓名" v-model="patient.name"></el-input>
+        </el-form-item>
+        <el-form-item label="身份证号" label-width="100px" prop="idCard" class="id">
+          <el-input placeholder="请输入身份证号" v-model="patient.idCard"></el-input>
+        </el-form-item>
+        <el-form-item
+          label="性别"
+          label-width="100px"
+          prop="gender"
+          :required="true"
+          class="gender"
+        >
+          <cp-radio-btn :options="options" v-model="patient.gender"></cp-radio-btn>
+        </el-form-item>
+        <el-form-item label="默认就诊人" label-width="100px" prop="defaultFlag">
+          <el-checkbox v-model="defaultFlag"></el-checkbox>
+        </el-form-item>
+      </el-form>
+      <div class="delete">
+        <el-button v-if="patient.id" type="danger" @click="remove" round>删除</el-button>
+      </div>
+    </el-drawer>
+  </div>
 </template>
 
 <style lang="scss" scoped>

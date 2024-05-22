@@ -6,9 +6,14 @@
   position: relative;
   display: flex;
   padding: 15px;
+  border: 1px solid #fff;
   background-color: var(--cp-bg);
   border-radius: 10px;
   transition: all 0.3s;
+  &.selected {
+    border: 1px solid var(--cp-primary);
+    background-color: var(--cp-primary-bg);
+  }
   .info {
     display: flex;
     flex-wrap: wrap;
@@ -62,22 +67,51 @@
 .patient-tip {
   color: var(--cp-tag);
 }
-.el-drawer {
+.patient-change {
+  padding: 15px;
+  > h3 {
+    font-weight: normal;
+    margin-bottom: 5px;
+  }
+  > p {
+    color: var(--cp-text3);
+  }
+}
+.patient-next {
+  padding: 15px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  .el-button {
+    width: 100%;
+  }
+}
+:deep(.el-drawer) {
+  .el-drawer__body {
+    padding: 0;
+  }
   .el-form-item {
-    padding: 15px 0;
+    padding: 15px;
+    margin-bottom: 0;
     :deep(.el-form-item__label) {
       justify-content: flex-start;
     }
-    &.name, &.id {
+    &.name, &.id, &.gender {
       border-bottom: 1px solid var(--cp-line);
     }
     .el-input {
       height: 40px;
     }
   }
-  .el-button {
-    display: block;
-    margin: 0 auto;
+  .delete {
+    position: fixed;
+    bottom: 20px;
     width: 100%;
+    padding: 0 20px;
+    .el-button {
+      width: 100%;
+      height: 40px;
+    }
   }
 }

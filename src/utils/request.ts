@@ -12,7 +12,7 @@ const baseURL = 'https://consult-api.itheima.net/'
 
 const instance = axios.create({
   baseURL,
-  timeout: 5000
+  timeout: 10000
 })
 // 添加请求拦截器
 instance.interceptors.request.use(

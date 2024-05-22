@@ -5,7 +5,9 @@ import type {
   KnowledgeParams,
   LikeType,
   Picture,
-  TopDep
+  TopDep,
+  ConsultOrderPreParams,
+  ConsultOrderPreData
 } from '@/types/consult'
 import request from '@/utils/request'
 
@@ -34,4 +36,9 @@ export const uploadImage = (file: File) => {
   const fd = new FormData()
   fd.append('file', file)
   return request<Picture>('/upload', 'POST', fd)
+}
+
+// 拉取预支付订单信息
+export const getConsultOrderPre = (params: ConsultOrderPreParams) => {
+  return request<ConsultOrderPreData>('/patient/consult/order/pre', 'GET', params)
 }
