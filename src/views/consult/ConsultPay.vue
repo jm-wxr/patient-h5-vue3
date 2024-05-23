@@ -1,25 +1,30 @@
 <script setup lang="ts">
-import { getConsultOrderPre } from '@/services/consult'
+import router from '@/router'
+import { createConsultOrder, getConsultOrderPre } from '@/services/consult'
 import { getPatientInfo } from '@/services/patient'
 import { useConsultStore } from '@/stores'
-import type { ConsultOrderPreData, ConsultOrderPreParams } from '@/types/consult'
+import type { ConsultOrderPreData } from '@/types/consult'
 import type { Patient } from '@/types/patient'
 import { onMounted, ref } from 'vue'
+import { onBeforeRouteLeave } from 'vue-router'
 
 const consultStore = useConsultStore()
 
-// 支付信息
-const payInfo = ref<ConsultOrderPreData>()
-// 患者信息
-const patientInfo = ref<Patient>()
-// 是否同意协议
-const isAgree = ref(false)
-// 控制抽屉显示
-const isShow = ref(false)
+const payInfo = ref<ConsultOrderPreData>() // 支付信息
+const patientInfo = ref<Patient>() // 患者信息
+const isAgree = ref(false) // 是否同意协议
+const isShow = ref(false) // 控制抽屉显示
+const payMethod = ref(0) // 支付方式
+const loading = ref(false) // 是否正在加载订单
+const orderId = ref('') // 订单id
 
 onMounted(() => {
   getPay()
   getPatient()
+})
+// 生成订单后不可回退
+onBeforeRouteLeave(() => {
+  if (orderId.value) return false
 })
 
 // 获取支付数据
@@ -38,9 +43,32 @@ const getPatient = async () => {
   const res = await getPatientInfo(consultStore.consult.patientId)
   patientInfo.value = res.data
 }
-
-const handleClose = () => {
-  isShow.value = false
+// 关闭支付抽屉时执行
+const handleClose = async () => {
+  try {
+    await ElMessageBox.confirm(
+      '取消支付将无法获得医生回复，医生接诊名额有限，是否确认关闭？',
+      '关闭支付',
+      {
+        cancelButtonText: '仍要关闭',
+        confirmButtonText: '继续支付'
+      }
+    )
+  } catch {
+    orderId.value = ''
+    router.push('/user/consult')
+    isShow.value = false
+  }
+}
+// 点击立即支付
+const onPay = async () => {
+  if (!isAgree.value) return ElMessage.warning('请先同意支付协议')
+  loading.value = true
+  const res = await createConsultOrder(consultStore.consult)
+  orderId.value = res.data.id
+  loading.value = false
+  consultStore.clear()
+  isShow.value = true
 }
 </script>
 
@@ -98,26 +126,32 @@ const handleClose = () => {
         <span>￥</span>
         <span>{{ payInfo?.actualPayment.toFixed(2) }}</span>
       </p>
-      <el-button type="primary" round @click="isShow = true">立即支付</el-button>
+      <el-button type="primary" round @click="onPay" :loading="loading">立即支付</el-button>
     </div>
-    <el-drawer v-model="isShow" direction="btt" :before-close="handleClose" :show-close="false">
+    <el-drawer
+      v-model="isShow"
+      :before-close="handleClose"
+      :show-close="false"
+      direction="btt"
+      size="350"
+    >
       <template #header>
         <p class="title">选择支付方式</p>
       </template>
+      <p class="price">￥{{ payInfo?.payment.toFixed(2) }}</p>
       <div class="pay-type">
-        <p class="price">￥ {{ payInfo?.payment.toFixed(2) }}</p>
-        <p class="item">
-          <svg-icon name="consult-wechat"></svg-icon>
-          <span>微信支付</span>
-          <el-checkbox></el-checkbox>
-        </p>
-        <p class="item">
-          <svg-icon name="consult-alipay"></svg-icon>
-          <span>支付宝支付</span>
-          <el-checkbox></el-checkbox>
-        </p>
+        <el-radio-group v-model="payMethod">
+          <el-radio class="item" :value="0">
+            <svg-icon name="consult-wechat" />
+            <span>微信支付</span>
+          </el-radio>
+          <el-radio class="item" :value="1">
+            <svg-icon name="consult-alipay" />
+            <span>支付宝支付</span>
+          </el-radio>
+        </el-radio-group>
       </div>
-      <el-button type="primary" round>立即支付</el-button>
+      <div class="pay-button"><el-button type="primary" round>立即支付</el-button></div>
     </el-drawer>
   </div>
 </template>
@@ -221,31 +255,56 @@ const handleClose = () => {
     border-top-right-radius: 15px;
     .el-drawer__header {
       margin-bottom: 0;
-    }
-    .title {
-      text-align: center;
-      font-size: 16px;
-      color: #000;
-      font-weight: 700;
-    }
-    .pay-type {
-      .price {
+      padding-top: 15px;
+      .title {
         text-align: center;
         font-size: 16px;
-        font-weight: 900;
         color: #000;
+      }
+    }
+    .el-drawer__body {
+      padding: 0;
+    }
+    .price {
+      text-align: center;
+      font-size: 16px;
+      font-weight: 900;
+      color: #000;
+      padding: 20px 0;
+    }
+    .pay-type {
+      border-top: 1px solid var(--cp-line);
+      border-bottom: 1px solid var(--cp-line);
+      margin-bottom: 15px;
+      .item:first-child {
+        border-bottom: 1px solid var(--cp-line);
       }
       .item {
         display: flex;
         align-items: center;
-        width: 100%;
+        height: 50px;
+        padding-right: 60vw;
+        .svg-icon {
+          width: 20px;
+          aspect-ratio: 1;
+        }
         span {
           flex: 1;
+          margin-left: 10px;
+          font-size: 16px;
+        }
+        .el-checkbox {
+          width: 20px;
+          height: 20px;
         }
       }
-      .svg-icon {
-        width: 20px;
-        aspect-ratio: 1;
+    }
+    .pay-button {
+      width: 100%;
+      padding: 0 15px;
+      .el-button {
+        width: 100%;
+        height: 40px;
       }
     }
   }
