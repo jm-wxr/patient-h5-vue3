@@ -70,6 +70,14 @@ const router = createRouter({
       path: '/consult/pay',
       component: () => import('@/views/consult/ConsultPay.vue'),
       meta: { title: '问诊支付' }
+    },
+    {
+      path: '/room',
+      component: () => import('@/views/room/Index.vue'),
+      meta: { title: '问诊室' },
+      beforeEnter(to) {
+        if (to.query.payResult === 'false') return '/user/consult'
+      }
     }
   ]
 })

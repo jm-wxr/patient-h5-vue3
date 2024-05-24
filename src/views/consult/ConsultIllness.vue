@@ -177,6 +177,9 @@ const next = () => {
   .illness-form {
     padding: 0px 20px;
     background-color: #fff;
+    .el-form-item {
+      margin-top: 15px;
+    }
     :deep(.form-upload) {
       display: flex;
       flex-direction: row;

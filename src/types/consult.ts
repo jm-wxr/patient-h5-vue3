@@ -106,7 +106,7 @@ export interface Picture {
 }
 
 // 问诊记录
-export type Consult = {
+export interface Consult {
   /** 问诊记录ID */
   id: string
   /** 问诊类型 */
@@ -168,4 +168,13 @@ export interface ConsultOrderPreData {
   payment: number
   /** 实付款 */
   actualPayment: number
+}
+
+export interface ConsultPayUrlParams {
+  /** 支付方式 0 微信 1 支付宝 */
+  paymentMethod: 0 | 1
+  /** 订单ID */
+  orderId: string
+  /** 支付回调地址 */
+  payCallback: string
 }

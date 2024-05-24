@@ -38,7 +38,6 @@ instance.interceptors.response.use(
     // 对响应数据做点什么
     if (res.data?.code !== 10000) {
       // 弹窗提示响应消息
-      ElMessage.error(res.data?.message || '未知错误')
       return Promise.reject(res.data)
     }
     return res.data

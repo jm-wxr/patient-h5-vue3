@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import router from '@/router'
-import { createConsultOrder, getConsultOrderPre } from '@/services/consult'
+import { createConsultOrder, getConsultOrderPayUrl, getConsultOrderPre } from '@/services/consult'
 import { getPatientInfo } from '@/services/patient'
 import { useConsultStore } from '@/stores'
-import type { ConsultOrderPreData } from '@/types/consult'
+import type { ConsultOrderPreData, PartialConsult } from '@/types/consult'
 import type { Patient } from '@/types/patient'
 import { onMounted, ref } from 'vue'
 import { onBeforeRouteLeave } from 'vue-router'
+
+type Key = keyof PartialConsult
 
 const consultStore = useConsultStore()
 
@@ -14,11 +16,36 @@ const payInfo = ref<ConsultOrderPreData>() // 支付信息
 const patientInfo = ref<Patient>() // 患者信息
 const isAgree = ref(false) // 是否同意协议
 const isShow = ref(false) // 控制抽屉显示
-const payMethod = ref(0) // 支付方式
+const payMethod = ref<0 | 1>(0) // 支付方式
 const loading = ref(false) // 是否正在加载订单
 const orderId = ref('') // 订单id
 
-onMounted(() => {
+onMounted(async () => {
+  // 刷新页面时，数据丢失，提示
+  const validKeys: Key[] = [
+    'type',
+    'illnessType',
+    'depId',
+    'illnessDesc',
+    'illnessTime',
+    'consultFlag',
+    'patientId'
+  ]
+  const valid = validKeys.every((key) => consultStore.consult[key] !== undefined)
+  if (!valid) {
+    ElMessageBox.alert(
+      '问诊信息不完整请重新填写，如有未支付的问诊订单可在问诊记录中继续支付！',
+      '温馨提示',
+      {
+        type: 'error',
+        closeOnClickModal: false,
+        callback: () => {
+          router.push('/')
+        }
+      }
+    )
+  }
+
   getPay()
   getPatient()
 })
@@ -51,7 +78,8 @@ const handleClose = async () => {
       '关闭支付',
       {
         cancelButtonText: '仍要关闭',
-        confirmButtonText: '继续支付'
+        confirmButtonText: '继续支付',
+        showClose: false
       }
     )
   } catch {
@@ -69,6 +97,31 @@ const onPay = async () => {
   loading.value = false
   consultStore.clear()
   isShow.value = true
+}
+// 选择支付方法后点击支付
+const onMethodPay = async () => {
+  if (payMethod.value === undefined) return ElMessage.warning('请选择支付方式')
+  const loading = ElLoading.service({
+    lock: true,
+    text: '跳转支付',
+    background: 'rgba(0, 0, 0, 0.7)'
+  })
+  try {
+    const res = await getConsultOrderPayUrl({
+      orderId: orderId.value,
+      paymentMethod: payMethod.value,
+      payCallback: 'http://localhost:5173/room'
+    })
+    loading.close()
+    window.location.href = res.data.payUrl
+  } catch (err) {
+    loading.close()
+    ElNotification({
+      type: 'info',
+      title: '温馨提示',
+      message: err.message
+    })
+  }
 }
 </script>
 
@@ -151,7 +204,9 @@ const onPay = async () => {
           </el-radio>
         </el-radio-group>
       </div>
-      <div class="pay-button"><el-button type="primary" round>立即支付</el-button></div>
+      <div class="pay-button">
+        <el-button type="primary" round @click="onMethodPay">立即支付</el-button>
+      </div>
     </el-drawer>
   </div>
 </template>
